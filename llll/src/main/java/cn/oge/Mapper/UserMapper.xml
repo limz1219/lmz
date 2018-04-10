@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.oge.Mapper.UserMapper">
+
+	<resultMap type="Userinfo" id="UserinfoResultMap">
+		<result column="user_loginName" property="user_loginName"/>
+		<result column="user_password" property="user_password"/>
+	</resultMap>
+	
+	<select id="login" parameterType="Userinfo" resultMap="UserinfoResultMap">
+		select * from userinfo where user_loginName=#{user_loginName} and user_password=#{user_password}
+	</select>
+</mapper>    

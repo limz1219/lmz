@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.oge.Mapper.UserinfoMapper">
+
+
+
+
+
+
+
+<!-- 	模糊查询 -->
+	<resultMap type="Userinfo" id="Userinfo_lmz">
+		<id column="user_id" property="user_id" />
+		<result property="user_loginName" column="user_loginName" />
+		<result property="user_password" column="user_password" />
+		<result property="user_email" column="user_email" />
+		<result property="user_phone" column="user_phone" />
+		<result property="user_addre" column="user_addre" />
+		<result property="user_type" column="user_type" />
+		<result property="Corporate_name" column="Corporate_name" />
+		<collection column="user_type" property="list" select="role_lmz"></collection>
+	</resultMap>
+	
+	<resultMap type="Role" id="role_name_lmz">
+		<id column="id" property="id" />
+		<result property="rolename" column="rolename" />
+		<result property="roledescription" column="roledescription" />
+		<result property="remark" column="remark" />
+	</resultMap>
+	
+	<select id="role_lmz" parameterType="int" resultMap="role_name_lmz">
+		SELECT id,rolename,roledescription,remark FROM role WHERE id = #{user_type}
+	</select>
+	
+	<select id="findUserinfoByUser_name" parameterType="map" resultMap="Userinfo_lmz">
+		select u.*,r.rolename from userinfo u,role r WHERE u.user_type = r.id and u.isdel=1
+	<if test="u.user_name != null and u.user_name!=''">
+		and u.user_name like "%"#{u.user_name}"%" 
+	</if>
+	   ORDER BY user_id DESC
+	   <![CDATA[ limit #{begin},#{count} ]]>
+	</select>
+	
+
+
+	<select id="getTotalCount_lmz" parameterType="Userinfo" resultType="int" >
+		select count(*)  from userinfo u,role r WHERE u.user_type = r.id and u.isdel=1 
+		<if test="user_name != null and user_name!=''">
+			and u.user_name like "%"#{user_name}"%" 
+		</if>
+	</select>
+
+
+	<!-- 新增 必须与表中字段名对应 -->
+	<select id="AddUserInfo_lmz" parameterType="Userinfo">
+		insert into userinfo
+		values(null,#{user_name},#{user_loginName},#{user_password},null,null,null,#{user_type},null,null,1,null)	
+	</select>
+	
+	
+	
+	
+	<select id="findType_lmz" resultType="Role">	
+    select * from role	
+	</select>
+	
+	
+
+	<!-- 唯一验证 -->
+
+	<select id="only_lmz" parameterType="Userinfo" resultType="int">
+		select count(*) from userinfo where user_loginName=#{user_loginName}
+	</select>
+
+	<!-- 根据loginName获取userid -->
+	<select id="getID" parameterType="Userinfo" resultType="Userinfo">
+		select user_id from userinfo where user_loginName=#{user_loginName}
+	</select>
+
+
+	<!-- 修改编辑 -->
+	<update id="update_lmz" parameterType="Userinfo">
+
+		update userinfo set
+		user_name=#{user_name},user_loginName=#{user_loginName},user_password=#{user_password}
+		where user_id=#{user_id}
+
+	</update>
+
+
+	<!-- 逻辑删除 -->
+
+	<update id="delUserInfo_lmz" parameterType="Userinfo">
+
+		update userinfo set isdel=0 where user_id = #{user_id}
+
+	</update>
+
+</mapper>

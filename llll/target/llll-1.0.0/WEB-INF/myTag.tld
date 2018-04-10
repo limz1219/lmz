@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<taglib>
+	<tlib-version>1.1</tlib-version>
+ 	<jsp-version>2.0</jsp-version>
+  	<short-name>p</short-name>
+  	
+  <tag>
+    <name>page</name>
+    <tag-class>com.zrgk.util.PageTag</tag-class>
+    <body-content>empty</body-content>
+    <attribute>
+        <name>url</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>page</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>
+  	
+</taglib>
